@@ -4,8 +4,10 @@
 <div id="bigbox">
   <p id="title">个人记事本</p>
   <div id="mediumbox">
-     用户名: <input type="text" name="fname" />
-     密码: <input type="text" name="lname" />
+    <div>用户名: <input type="text" name="fname" /></div>
+    <div> 密码: <input type="text" name="lname" /></div>
+     
+    
     </div>
   </div>
 </div>
