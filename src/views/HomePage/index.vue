@@ -7,7 +7,7 @@
           href="#"
           target="_blank"
           rel="noopener"
-          > </a
+          >Olivia's note book</a
         >
       </li>
 
