@@ -4,11 +4,12 @@
 <div id="bigbox">
   <p id="title">个人记事本</p>
   <div id="mediumbox">
-    <div>用户名: <input type="text" name="fname" /></div>
-    <div> 密码: <input type="text" name="lname" /></div>
-     
-    
+    <div class="srk">用户名: <input type="text" name="fname" /></div>
+    <div class="srk"> 密 &#8195; 码: <input type="text" name="lname" /></div>
+        
+        <router-link to="/HomePage/HomePage"><button id="btn">登陆</button></router-link>
     </div>
+
   </div>
 </div>
  
@@ -25,7 +26,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 #bigbox{
 width:800px;
 height:500px;
@@ -68,5 +69,11 @@ border-radius: 5px;
 }
 .s2{
   display: inline;
+}
+.srk{
+  margin:30px 30px 30px 30px;
+}
+#btn{
+  margin-right:50px;
 }
 </style>
