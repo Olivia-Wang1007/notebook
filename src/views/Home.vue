@@ -7,7 +7,9 @@
     <div class="srk">用户名: <input type="text" name="fname" /></div>
     <div class="srk"> 密 &#8195; 码: <input type="text" name="lname" /></div>
         
-        <router-link to="/HomePage/HomePage"><button id="btn">登陆</button></router-link>
+        <router-link to="/HomePage/HomePage"><at-button type="primary">登陆</at-button></router-link>
+        
+
     </div>
 
   </div>
@@ -20,6 +22,7 @@
 import HelloWorld from "@/components/HelloWorld.vue";
 
 export default {
+
   name: "Home",
   components: {
     HelloWorld

@@ -2,16 +2,17 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-//import Routers from './router.js';
-import ViewUI from 'view-design';
-import 'view-design/dist/styles/iview.css';
-import { Button, Table } from 'view-design';
-Vue.component('Button', Button);
-Vue.component('Table', Table);
 
-//Vue.use(VueRouter);
-Vue.use(ViewUI);
 
+import AtComponents from 'at-ui'
+import 'at-ui-style' 
+Vue.use(AtComponents)
+
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+
+Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
 new Vue({

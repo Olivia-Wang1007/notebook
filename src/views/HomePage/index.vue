@@ -3,47 +3,35 @@
     <div id="bigbox">
         <!-- 上面导航栏 -->
         <div id="tabbar">
-            <p id="txt">我的记事本</p>
-            <router-link to="/User/User">
-                <Dropdown style="margin-left: 20px" placement="bottom-end">
-        <a href="javascript:void(0)">
-            admin
-            <Icon type="ios-arrow-down"></Icon>
-        </a>
-        <DropdownMenu slot="list">
-            <DropdownItem>个人信息</DropdownItem>
-            <DropdownItem>退出</DropdownItem>
-    
+            <p class="txt">我的记事本</p>
+            <div id="cltxt">
+           <router-link to="/User/User">
+<at-dropdown placement="bottom-right" @on-dropdown-command="handleCommand">
+  <at-button size="small" ><i class="el-icon-user"></i>admin <i class="icon icon-chevron-down"></i></at-button>
+  <at-dropdown-menu slot="menu">
+    <at-dropdown-item name="shenzhen">个人信息</at-dropdown-item>
+    <at-dropdown-item name="guangzhou">退出</at-dropdown-item>
+  </at-dropdown-menu>
+</at-dropdown>
 
-        </DropdownMenu>
-    </Dropdown>
-            </router-link>
-            <div>
+</router-link>
+            </div>
+ 
+      </div>
+<!-- 中间按钮部分 -->
+<div class="row" >
+<el-button type="text" @click="open" class="btns"><i class="el-icon-plus"></i>创建</el-button>
+<el-button type="text" @click="open" class="btns"><i class="el-icon-edit"></i>修改</el-button>
+<el-button type="text" @click="open" class="btns"><i class="el-icon-delete"></i>删除</el-button>
 
 
 </div>
-           
-        </div>
-<!-- 中间按钮部分 -->
-    <Button type="primary" @click="modal1 = true">Display dialog box</Button>
-    <Modal
-        v-model="modal1"
-        title="Common Modal dialog box title"
-        @on-ok="ok"
-        @on-cancel="cancel">
-        <p>Content of dialog</p>
-        <p>Content of dialog</p>
-        <p>Content of dialog</p>
-    </Modal>
-        <Button type="primary">创建</Button>
-    <Button type="primary">修改</Button>
-    <Button type="primary">删除</Button>    
   <div id="mediumbox">
    <!-- 下面的事件列表  -->
-    <div>
-        <Table highlight-row ref="currentRowTable" :columns="columns3" :data="data1"></Table>
-        <Button @click="handleClearCurrentRow">Clear</Button>
-    </div>
+<at-table :columns="columns1" :data="data1"></at-table>
+
+
+
 
 
         
@@ -54,56 +42,72 @@
 </template>
 <script>
 //import admin from '@/components/HomePage/admin.vue';
+
+ 
     export default {
-        
-        data () {
-            return {
-                columns3: [
-                    {
-                        type: 'index',
-                        width: 60,
-                        align: 'center'
-                    },
-                    {
-                        title: '这是啥',
-                        key: 'name'
-                    },
-                    {
-                        title: 'Age',
-                        key: 'age'
-                    },
-                    {
-                        title: 'Address',
-                        key: 'address'
-                    }
-                ],
-                data1: [
-                    {
-                        name: '第一件事',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                        date: '2016-10-03'
-                    },
-                    {
-                        name: '第二件事',
-                        age: 24,
-                        address: 'London No. 1 Lake Park',
-                        date: '2016-10-01'
-                    },
-                    {
-                        name: '第三件事',
-                        age: 30,
-                        address: 'Sydney No. 1 Lake Park',
-                        date: '2016-10-02'
-                    }
-                ]
-            }
-        },
-        methods: {
-            handleClearCurrentRow () {
-                this.$refs.currentRowTable.clearCurrentRow();
-            }
-        }
+          data () {
+      return {
+             
+                value: '',
+            
+        columns1: [
+          {
+            title: '选择',
+            key: 'choose'
+          },
+          {
+            title: '事件标题',
+            key: 'title'
+          },
+          {
+            title: '事件内容',
+            key: 'content'
+          }
+        ],
+        data1: [
+          {
+            choose: '库里',
+            title: 18,
+            address: '深圳市宝安区创业一路'
+          },
+          {
+            choose: '詹姆斯',
+            title: 25,
+            address: '广州市天河区岗顶'
+          },
+          {
+            choose: '詹姆斯',
+            title: 25,
+            address: '广州市天河区岗顶'
+          },
+          {
+            choose: '詹姆斯',
+            title: 25,
+            address: '广州市天河区岗顶'
+          }
+        ]
+      }
+    },
+    methods: {
+      open() {
+        this.$prompt('创建', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+          inputErrorMessage: '邮箱格式不正确'
+        }).then(({ value }) => {
+          this.$message({
+            type: 'success',
+            message: '你的邮箱是: ' + value
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          });       
+        });
+      }
+    }  
     }
 
 </script>
@@ -151,9 +155,10 @@ border-radius: 5px;
 .s2{
   display: inline;
 }
-#txt{
+.txt{
 
   float: left;
+  margin-top: 9px;;
 }
 #tabbar{
     border-bottom:2px solid black;
@@ -162,5 +167,12 @@ border-radius: 5px;
 }
 #admin{
     float:right;
+}
+.btns{
+    margin:0 auto;
+}
+#cltxt{
+    float: right;
+    margin-top:15px;
 }
 </style>

@@ -4,12 +4,29 @@
 
 
 <div id="bigbox">
-  <p id="title">我的记事本</p>
+        <div id="tabbar">
+            <p class="txt">我的记事本</p>
+            <div id="cltxt">
+           <router-link to="/User/User">
+<at-dropdown placement="bottom-right" @on-dropdown-command="handleCommand">
+  <at-button size="small" ><i class="el-icon-user"></i>admin <i class="icon icon-chevron-down"></i></at-button>
+  <at-dropdown-menu slot="menu">
+    <at-dropdown-item name="shenzhen">个人信息</at-dropdown-item>
+    <at-dropdown-item name="guangzhou">退出</at-dropdown-item>
+  </at-dropdown-menu>
+</at-dropdown>
+
+</router-link>
+            </div>
+ 
+      </div>
   <div id="mediumbox">
-    <div>用户名: <input type="text" name="fname" /></div>
-    <div> 密码: <input type="text" name="lname" /></div>
+    <div class="srk">用户名: <input type="text" name="fname" /></div>
+    <div class="srk"> 密 &#8195; 码: <input type="text" name="lname" /></div>
         
-        <button>登陆</button>
+        <at-button type="primary">登陆</at-button>
+        
+
     </div>
 
   </div>
@@ -34,26 +51,18 @@ bottom:0;
 border-radius: 5px;
 }
 .home{position: relative;}
-#title{
-  height: 80px;
-  width: 200px;
-  font-size: 30px;
-  font-weight: bold; 
-  color:black;
-  right: 300px;
-  left:300px;
-    display: inline-block;
-  margin: 0 50px;
-  margin-top: 30px;
-  
-  
-}
+
 #mediumbox{
   height:200px;
   width:350px;
   border:1px solid black;
-  margin:0 auto;
+  margin-top:100px;
+  margin-left:100px;
 }
+#tl{
+float:left;
+margin-top: 10px;
+}，
 .s1{
   width:80px;
   height:20px;
@@ -63,5 +72,22 @@ border-radius: 5px;
 }
 .s2{
   display: inline;
+}
+.srk{
+  margin:30px 30px 30px 30px;
+}
+.txt{
+
+  float: left;
+  margin-top: 9px;;
+}
+#tabbar{
+    border-bottom:2px solid black;
+    height:50px;
+    width:100%;
+}
+#cltxt{
+    float: right;
+    margin-top:15px;
 }
 </style>
