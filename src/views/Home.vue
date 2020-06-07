@@ -1,18 +1,17 @@
 <template>
   <div class="home">
     <HelloWorld msg=" " />
-<div id="bigbox">
+
   <p id="title">个人记事本</p>
   <div id="mediumbox">
     <div class="srk">用户名: <input type="text" name="fname" /></div>
-    <div class="srk"> 密 &#8195; 码: <input type="text" name="lname" /></div>
+    <div class="srk"> 密 &#8195;  &#8195; 码: <input type="password" name="lname" /></div>
         
         <router-link to="/HomePage/HomePage"><at-button type="primary">登陆</at-button></router-link>
         
 
     </div>
-
-  </div>
+  
 </div>
  
 </template>
@@ -20,12 +19,15 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
+ //import Create from "@/components/HomePage/create.vue";
+
 
 export default {
 
   name: "Home",
   components: {
-    HelloWorld
+    HelloWorld,
+   
   }
 };
 </script>

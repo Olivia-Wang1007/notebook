@@ -1,16 +1,16 @@
 <template>
   <div class="HomePage">
-    <div id="bigbox">
+  
         <!-- 上面导航栏 -->
         <div id="tabbar">
             <p class="txt">我的记事本</p>
-            <div id="cltxt">
-           <router-link to="/User/User">
+            <div >
+           <router-link to="/User/User" id="cltxt">
 <at-dropdown placement="bottom-right" @on-dropdown-command="handleCommand">
   <at-button size="small" ><i class="el-icon-user"></i>admin <i class="icon icon-chevron-down"></i></at-button>
   <at-dropdown-menu slot="menu">
     <at-dropdown-item name="shenzhen">个人信息</at-dropdown-item>
-    <at-dropdown-item name="guangzhou">退出</at-dropdown-item>
+    <router-link to="/Home"><at-dropdown-item name="guangzhou">退出</at-dropdown-item></router-link>
   </at-dropdown-menu>
 </at-dropdown>
 
@@ -20,81 +20,98 @@
       </div>
 <!-- 中间按钮部分 -->
 <div class="row" >
-<el-button type="text" @click="open" class="btns"><i class="el-icon-plus"></i>创建</el-button>
-<el-button type="text" @click="open" class="btns"><i class="el-icon-edit"></i>修改</el-button>
+
+<el-button type="text" @click="open" class="btns" title="创建"><i class="el-icon-plus"></i>创建</el-button>
+<el-button type="text" @click="open" class="btns" title="修改"><i class="el-icon-edit"></i>修改</el-button>
 <el-button type="text" @click="open" class="btns"><i class="el-icon-delete"></i>删除</el-button>
 
 
 </div>
   <div id="mediumbox">
    <!-- 下面的事件列表  -->
-<at-table :columns="columns1" :data="data1"></at-table>
+ <!-- <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+    <el-table-column type="selection"  width="55">
+    </el-table-column>
+    <el-table-column label="日期" width="120">
+      <template slot-scope="scope">{{ scope.row.date }}</template>
+    </el-table-column>
+    <el-table-column prop="name" label="姓名" width="120">
+    </el-table-column>
+    <el-table-column prop="address" label="地址" show-overflow-tooltip>
+    </el-table-column>
+  </el-table>
+  <div style="margin-top: 20px">
+    <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
+    <el-button @click="toggleSelection()">取消选择</el-button>
+  </div> -->
 
 
-
-
-
+<Create></Create>
+<save></Save>
         
     </div>
+    <!-- 测试代码 -->
+    <!-- <Modify></Modify> -->
+    	<div>
+      <!-- <input type="text" name="" id="" v-model="todo">
+      <button @click="add()">增加</button>
 
-  </div>
+    </div> -->
+ </div>
   </div>
 </template>
 <script>
 //import admin from '@/components/HomePage/admin.vue';
-
- 
+import Create from "@/components/HomePage/create.vue";
+ import Save from "@/components/HomePage/save.vue";
+//  import storage from './storage.js'
     export default {
-          data () {
+       components: {
+   // Modify,
+    Create,
+    Save
+  },
+
+          data() {
       return {
-             
-                value: '',
-            
-        columns1: [
-          {
-            title: '选择',
-            key: 'choose'
-          },
-          {
-            title: '事件标题',
-            key: 'title'
-          },
-          {
-            title: '事件内容',
-            key: 'content'
-          }
-        ],
-        data1: [
-          {
-            choose: '库里',
-            title: 18,
-            address: '深圳市宝安区创业一路'
-          },
-          {
-            choose: '詹姆斯',
-            title: 25,
-            address: '广州市天河区岗顶'
-          },
-          {
-            choose: '詹姆斯',
-            title: 25,
-            address: '广州市天河区岗顶'
-          },
-          {
-            choose: '詹姆斯',
-            title: 25,
-            address: '广州市天河区岗顶'
-          }
-        ]
+        return:{
+      todo:'',
+      list:[
+        {title:'进行中',checked:true},
+        {title:'已完成',checked:false}
+      ]
+    },
+        tableData: [{
+          date: '2016-05-03',
+          name: '王小虎',
+          address: ' 1518 '
+        }, {
+          date: '2016-05-02',
+          name: '王小虎',
+          address: ' 1518 '
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: ' 1518 '
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: ' 1518 '
+        }, {
+          date: '2016-05-07',
+          name: '王小虎',
+          address: ' 1518 '
+        }],
+        multipleSelection: []
       }
     },
     methods: {
       open() {
-        this.$prompt('创建', '提示', {
+        this.$prompt('创建', '创建', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-          inputErrorMessage: '邮箱格式不正确'
+          //inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+          //inputErrorMessage: '邮箱格式不正确'
         }).then(({ value }) => {
           this.$message({
             type: 'success',
@@ -106,7 +123,46 @@
             message: '取消输入'
           });       
         });
-      }
+      },
+       toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+  //     add(){
+  //     this.list.push({
+  //       title:this.todo,
+  //       checked:false
+  //     });
+  //     this.todo = '';
+  //     //localStorage.setItem('key',JSON.stringify(this.list));
+  //     storage.set('list',this.list)
+  //   },
+  //   removeData(key){
+  //     this.list.splice(key,1);
+  //     //localStorage.setItem('key',JSON.stringify(this.list));
+  //     storage.set('list',this.list)
+  //   },
+  //   add2(){
+  //     //localStorage.setItem('key',JSON.stringify(this.list));
+  //     storage.set('list',this.list)
+  //   }
+  // },
+  // mounted() {
+  //   //var list = JSON.parse(localStorage.getItem('key'));
+  //   var list = storage.get('list');
+  //   if (list) {
+  //     this.list = list
+  //   }
+  //   //console.log(this.list)
+
     }  
     }
 
@@ -142,7 +198,7 @@ border-radius: 5px;
 #mediumbox{
   height:200px;
   width:350px;
-  border:1px solid black;
+
   margin:0 auto;
 }
 .s1{
@@ -158,10 +214,12 @@ border-radius: 5px;
 .txt{
 
   float: left;
-  margin-top: 9px;;
+  margin-top: 15px;
+  margin-left:30px;
+  font-size: 20px;;
 }
 #tabbar{
-    border-bottom:2px solid black;
+    border-bottom:1px solid black;
     height:50px;
     width:100%;
 }
@@ -170,9 +228,11 @@ border-radius: 5px;
 }
 .btns{
     margin:0 auto;
+    color:blue;
 }
 #cltxt{
     float: right;
     margin-top:15px;
+    margin-right: 30px;
 }
 </style>

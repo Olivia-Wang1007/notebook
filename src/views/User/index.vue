@@ -3,7 +3,7 @@
     
 
 
-<div id="bigbox">
+
         <div id="tabbar">
             <p class="txt">我的记事本</p>
             <div id="cltxt">
@@ -29,7 +29,7 @@
 
     </div>
 
-  </div>
+  
 </div>
         
   
@@ -82,7 +82,7 @@ margin-top: 10px;
   margin-top: 9px;;
 }
 #tabbar{
-    border-bottom:2px solid black;
+    border-bottom:1px solid black;
     height:50px;
     width:100%;
 }
