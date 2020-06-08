@@ -22,21 +22,35 @@
       </div>
   <div id="mediumbox">
     <div class="srk">用户名: <input type="text" name="fname" /></div>
-    <div class="srk"> 密 &#8195; 码: <input type="text" name="lname" /></div>
+    <div class="srk"> 密 &#8195; 码: <input type="password" name="lname" /></div>
         
         <at-button type="primary">登陆</at-button>
         
 
     </div>
 
-  
+  <Test></Test>
 </div>
         
   
 
  
 </template>
+<script>
+//import admin from '@/components/HomePage/admin.vue';
+//import Create from "@/components/HomePage/create.vue";
+ import Test from "@/components/User/test.vue";
+//  import storage from './storage.js'
+    export default {
+       components: {
+   // Modify,
+    Test
+  },
 
+      
+    }
+
+</script>
 <style scoped>
 #bigbox{
 width:800px;

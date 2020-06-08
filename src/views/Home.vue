@@ -4,7 +4,7 @@
 
   <p id="title">个人记事本</p>
   <div id="mediumbox">
-    <div class="srk">用户名: <input type="text" name="fname" /></div>
+    <div class="srk" >用户名: <input type="text" name="fname" /></div>
     <div class="srk"> 密 &#8195;  &#8195; 码: <input type="password" name="lname" /></div>
         
         <router-link to="/HomePage/HomePage"><at-button type="primary">登陆</at-button></router-link>

@@ -19,15 +19,15 @@
  
       </div>
 <!-- 中间按钮部分 -->
-<div class="row" >
+<!-- <div class="row" > -->
 
-<el-button type="text" @click="open" class="btns" title="创建"><i class="el-icon-plus"></i>创建</el-button>
-<el-button type="text" @click="open" class="btns" title="修改"><i class="el-icon-edit"></i>修改</el-button>
-<el-button type="text" @click="open" class="btns"><i class="el-icon-delete"></i>删除</el-button>
+<!-- <el-button type="text" @click="open" class="btns" title="创建"><i class="el-icon-plus"></i>创建</el-button> -->
+<!-- <el-button type="text" @click="open" class="btns" title="修改"><i class="el-icon-edit"></i>修改</el-button> -->
+<!-- <el-button type="text" @click="open" class="btns"><i class="el-icon-delete"></i>删除</el-button> -->
+<!-- <el-button type="text" @click="open1" class="btns">删除</el-button> -->
 
-
-</div>
-  <div id="mediumbox">
+<!-- </div> -->
+  <!-- <div id="mediumbox"> -->
    <!-- 下面的事件列表  -->
  <!-- <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
     <el-table-column type="selection"  width="55">
@@ -46,10 +46,10 @@
   </div> -->
 
 
-<Create></Create>
-<save></Save>
+<!-- <Create></Create> -->
+<!-- <save></Save> -->
         
-    </div>
+    <!-- </div> -->
     <!-- 测试代码 -->
     <!-- <Modify></Modify> -->
     	<div>
@@ -58,18 +58,24 @@
 
     </div> -->
  </div>
+ <Test></Test>
+ <Modal>我是一个弹窗</Modal>
   </div>
 </template>
 <script>
+ import Modal from "@/components/User/modal.vue";
 //import admin from '@/components/HomePage/admin.vue';
-import Create from "@/components/HomePage/create.vue";
- import Save from "@/components/HomePage/save.vue";
+//import Create from "@/components/HomePage/create.vue";
+ //import Save from "@/components/HomePage/save.vue";
+  import Test from "@/components/User/test.vue";
 //  import storage from './storage.js'
     export default {
        components: {
    // Modify,
-    Create,
-    Save
+    //Create,
+    //Save,
+    Test,
+    Modal 
   },
 
           data() {
@@ -136,32 +142,23 @@ import Create from "@/components/HomePage/create.vue";
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
-  //     add(){
-  //     this.list.push({
-  //       title:this.todo,
-  //       checked:false
-  //     });
-  //     this.todo = '';
-  //     //localStorage.setItem('key',JSON.stringify(this.list));
-  //     storage.set('list',this.list)
-  //   },
-  //   removeData(key){
-  //     this.list.splice(key,1);
-  //     //localStorage.setItem('key',JSON.stringify(this.list));
-  //     storage.set('list',this.list)
-  //   },
-  //   add2(){
-  //     //localStorage.setItem('key',JSON.stringify(this.list));
-  //     storage.set('list',this.list)
-  //   }
-  // },
-  // mounted() {
-  //   //var list = JSON.parse(localStorage.getItem('key'));
-  //   var list = storage.get('list');
-  //   if (list) {
-  //     this.list = list
-  //   }
-  //   //console.log(this.list)
+  open1() {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      }
 
     }  
     }
