@@ -3,20 +3,15 @@
     <div class="row" >
         <p>{{gettime}}</p>
 <el-button @click="showCont" class="btns">新建</el-button>
-<el-button @click="showCont1" class="btns">查看</el-button>
+<el-button @click="showCont1" class="btns">修改</el-button>
 <el-button @click="showCont1" class="btns" 
 >删除</el-button>
-
-<!-- <el-button type="text" @click="open" class="btns" title="创建"><i class="el-icon-plus"></i>创建</el-button> -->
-<!-- <el-button type="text" @click="open" class="btns" title="修改"><i class="el-icon-edit"></i>修改</el-button> -->
-<!-- <el-button type="text" @click="open" class="btns"><i class="el-icon-delete"></i>删除</el-button> -->
-<!-- <el-button type="text" @click="open1" class="btns" >删除</el-button> -->
 
 </div>
    <div class="input-text">	 
 
   <!--列表内容-->
-  <table border="2" class="task">
+  <table border="1" class="task">
  <tr v-for="(item, index) in inputList" :key="item.id" class="biao">
   <!--单选框绑定了item.finished，还添加了点击事件-->
   <td><input type="checkbox"
@@ -29,7 +24,9 @@
    <!-- 时间列 -->
 
   <td>{{item.add_time | dateFmt('YYYY-MM-DD HH:mm:ss')}}</td>
+
  <!-- 删除按钮列 -->
+
   <td><el-button @click="deleteItem(index)"
    class="del"
    :class="{'native':item.finished === true}"
@@ -52,9 +49,13 @@
   </div>
   
 <label for="inputNum">请输入：</label>
-<input type="text" id="inputNum" name="inputNum" placeholder="请输入新建内容"
-	    @keydown.13="addItem" v-model="inputItem.content" class="edit"
-	  >
+<input type="text" 
+id="inputNum" 
+name="inputNum" 
+placeholder="请输入新建内容"
+@keydown.13="addItem" 
+v-model="inputItem.content" 
+class="edit">
       <el-button type="primary" @click="addItem">确定</el-button>
       <el-button type="danger" @click="showCont">取消</el-button>
 </div>
@@ -63,7 +64,7 @@
     <div class="tab">  <p>查看</p>
     <div class="ck" ></div>
   </div>
-  <div>{{content}}</div>
+  <div></div>
 
       <el-button type="primary" @click="showCont1">确定</el-button>
       <el-button type="danger" @click="showCont1">取消</el-button>
@@ -91,8 +92,6 @@ data () {
 	      finished: false,
           deleted: false,
           isDel:false,
-          
-    
        }
       }
     },
