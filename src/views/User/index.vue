@@ -24,18 +24,31 @@
       </div>
       <div class="srk">
         密 &#8195; 码:
-        <input type="password" name="lname" />
+        <input type="password" name="lname" @keydown.13="modifyCode" />
       </div>
-
+      <Input
+        v-model="newCode"
+        placeholder="请输入新密码..."
+        style="width: 250px"
+        v-show="changeClicked"
+      />
       <Button type="primary">登陆</Button>
     </div>
-
   </div>
 </template>
 <script>
-
 export default {
-
+  data() {
+    return {
+      newCode: "",
+      changeClicked: false,
+    };
+  },
+  methods: {
+    modifyCode() {
+      this.changeClicked = !this.changeClicked;
+    },
+  },
 };
 </script>
 <style scoped>
@@ -56,7 +69,7 @@ export default {
 }
 
 #mediumbox {
-  height: 200px;
+  height: 300px;
   width: 350px;
   border: 1px solid black;
   margin-top: 100px;
@@ -66,7 +79,7 @@ export default {
   float: left;
   margin-top: 10px;
 }
- .s1 {
+.s1 {
   width: 80px;
   height: 20px;
   border: 1px solid black;
@@ -84,7 +97,7 @@ export default {
   margin-top: 15px;
   margin-left: 50px;
   font-size: 20px;
-   margin-bottom:15px;
+  margin-bottom: 15px;
 }
 #tabbar {
   border-bottom: 1px solid black;
@@ -94,6 +107,6 @@ export default {
 #cltxt {
   float: right;
   margin-top: 15px;
-  margin-right:50px;
+  margin-right: 50px;
 }
 </style>
