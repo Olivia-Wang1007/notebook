@@ -1,9 +1,7 @@
 <template>
   <div>
     <!-- 新建的弹窗-->
-    <Button type="primary" @click="createModal = true" class="btns"
-      >新建</Button
-    >
+    <Button type="primary" @click="createBtn" class="btns">新建</Button>
     <Modal
       v-model="createModal"
       title="新建"
@@ -42,7 +40,7 @@
       onselect
       @on-select="getRow"
       @on-row-click="checkContent"
-      @on-select-cancel="cancelSelect"
+      class="tab"
     ></Table>
 
     <!-- 查看的弹窗 -->
@@ -56,7 +54,7 @@
 export default {
   data() {
     return {
-      cacelId:'',
+      cacelId: "",
       checkModal: false,
       nowContent: "",
       createModal: false,
@@ -93,6 +91,14 @@ export default {
       this.allList = [...this.allList, list];
       this.content = "";
       this.saveContent();
+      console.log(this.cancelId); //undefined
+    },
+    createBtn() {
+      //if(this.nowId =""){
+      this.createModal = true;
+      // }else{
+      //   alert('请先取消勾选！')
+      // }
     },
     ok() {
       this.$Message.info("Clicked ok");
@@ -108,15 +114,22 @@ export default {
       this.saveContent();
       this.selectedItems = selection;
     },
-    cancelSelect(selection,row) {
-      this.cancelId=row.id;
-      //console.log(this.cancelId);//
-      //console.log(selection) //[]
-     // console.log(selection.id)//undefined
-    },
+    // cancelSelect(selection, row) {
+    //   this.cancelId = row.id;
+    //   //this.selectedItems=null;
+    //   //console.log(this.cancelId);//
+    //   //console.log(selection) //[]
+    //   // console.log(selection.id)//undefined
+    // },
     findContent(con) {
       return con.id === this.nowId;
     },
+    // findCancel(can) {
+    //   return (can.id = this.cancelId);
+    //   if (this.nowId === this.cancelId) {
+    //     this.nowId = -1;
+    //   }
+    // },
     modifyOk() {
       this.old = this.allList.find(this.findContent);
 
@@ -193,5 +206,9 @@ export default {
 <style scoped>
 .btns {
   margin: 10px 90px;
+}
+.tab {
+  width: 800px;
+  margin: 0 auto;
 }
 </style>
