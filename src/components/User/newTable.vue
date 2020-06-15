@@ -8,6 +8,7 @@
       @on-ok="createOk"
       @on-cancel="cancel"
     >
+      <!-- 新建输入框 -->
       <Input
         v-model="content"
         type="textarea"
@@ -24,11 +25,12 @@
       :mask-closable="false"
       @on-ok="modifyOk"
     >
+      <!-- 修改输入框 -->
       <Input v-model="nowContent" :rows="4" type="textarea" />
     </Modal>
 
     <!-- 删除按钮 -->
-    <Button @click="confirm" type="primary" class="btns">删除</Button>
+    <Button @click="deleteConfirm" type="primary" class="btns">删除</Button>
 
     <!-- 表格区域 -->
     <Table
@@ -39,7 +41,9 @@
       :data="allList"
       onselect
       @on-select="getRow"
+      @on-select-cancel="cancelSelect"
       @on-row-click="checkContent"
+      @on-select-all="selectAll"
       class="tab"
     ></Table>
 
@@ -54,14 +58,12 @@
 export default {
   data() {
     return {
-      cacelId: "",
+      selectedItems: "",
       checkModal: false,
       nowContent: "",
       createModal: false,
       content: "",
-      modal7: false,
       modifyModal: false,
-      value17: "",
       columns4: [
         {
           type: "selection",
@@ -91,14 +93,9 @@ export default {
       this.allList = [...this.allList, list];
       this.content = "";
       this.saveContent();
-      console.log(this.cancelId); //undefined
     },
     createBtn() {
-      //if(this.nowId =""){
       this.createModal = true;
-      // }else{
-      //   alert('请先取消勾选！')
-      // }
     },
     ok() {
       this.$Message.info("Clicked ok");
@@ -111,25 +108,20 @@ export default {
       this.nowId = row.id;
       this.nowContent = row.content;
       this.content = "";
+
       this.saveContent();
       this.selectedItems = selection;
     },
-    // cancelSelect(selection, row) {
-    //   this.cancelId = row.id;
-    //   //this.selectedItems=null;
-    //   //console.log(this.cancelId);//
-    //   //console.log(selection) //[]
-    //   // console.log(selection.id)//undefined
-    // },
+    cancelSelect(selection) {
+      this.selectedItems = selection;
+    },
+    selectAll(selection) {
+      this.selectedItems = selection;
+    },
     findContent(con) {
       return con.id === this.nowId;
     },
-    // findCancel(can) {
-    //   return (can.id = this.cancelId);
-    //   if (this.nowId === this.cancelId) {
-    //     this.nowId = -1;
-    //   }
-    // },
+
     modifyOk() {
       this.old = this.allList.find(this.findContent);
 
@@ -144,10 +136,9 @@ export default {
       this.saveContent();
     },
 
-    confirm() {
-      this.nowIndex = this.allList.findIndex(this.findContent);
-
-      if (this.nowIndex < 0) {
+    deleteConfirm() {
+      //debugger;
+      if (this.selectedItems.length == 0) {
         this.modifyModal = false;
         alert("请勾选想要删除的事件！");
       } else {
@@ -155,10 +146,10 @@ export default {
           title: "确认删除选中内容吗？",
           onOk: () => {
             this.$Message.info("已删除");
-            for (var i = 0; i < this.selectedItems.length; i++) {
-              this.nowIndex = this.allList.findIndex(this.findContent);
-              this.allList.splice(this.nowIndex, 1);
-            }
+            let selectedIds = this.selectedItems.map((item) => item.id);
+            this.allList = this.allList.filter(
+              (item) => !selectedIds.includes(item.id)
+            );
 
             this.saveContent();
           },
@@ -178,10 +169,9 @@ export default {
       this.nowContent = content1.content;
     },
     modifyBtn() {
-      //this.modifyModal = true;
+      console.log(this.selectedItems);
       this.nowIndex = this.allList.findIndex(this.findContent);
-      //consoleconsole.log(this.nowIndex);
-      if (this.nowIndex < 0) {
+      if (this.selectedItems.length == 0) {
         this.modifyModal = false;
         alert("请勾选想要修改的记录！");
       } else if (this.selectedItems.length > 1) {
