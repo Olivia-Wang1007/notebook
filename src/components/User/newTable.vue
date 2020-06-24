@@ -64,6 +64,7 @@ export default {
       createModal: false,
       content: "",
       modifyModal: false,
+      clk: false,
       columns4: [
         {
           type: "selection",
@@ -83,6 +84,11 @@ export default {
     };
   },
   methods: {
+    // createOk() {
+    //   console.log(this.clk);
+    //   this.clk = !this.clk;
+    //   console.log(this.clk);
+    // },
     createOk() {
       // 把新项添加到allList里
       const list = {
@@ -124,7 +130,7 @@ export default {
 
     modifyOk() {
       this.old = this.allList.find(this.findContent);
-
+      console.log(this.old);
       this.old.content = this.nowContent;
       this.old.time = new Date().toLocaleString();
 
@@ -191,6 +197,34 @@ export default {
       }
     }
   },
+  // watch: {
+  //   allList: function() {
+  //     const list = {
+  //       id: Date.now().toString(36),
+  //       content: this.content,
+  //       time: new Date().toLocaleString(),
+  //     };
+  //     console.log("测试");
+  //     console.log(this.allList);
+  //     return [...this.allList, list];
+  //   },
+  // },
+  // computed:{
+  //   allList: function() {
+  //    if(this.clk=true){
+  //         const list = {
+  //         id: Date.now().toString(36),
+  //         content: this.content,
+  //         time: new Date().toLocaleString(),
+  //       };
+  //       console.log("测试");
+  //       console.log(this.allList);
+  //       this.allList= [...this.allList, list];
+  //    }
+
+  //     }
+
+  //}
 };
 </script>
 <style scoped>

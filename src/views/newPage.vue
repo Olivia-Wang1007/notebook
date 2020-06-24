@@ -19,15 +19,15 @@
       </router-link>
     </div>
     <!-- 表格 -->
-    <NewTable></NewTable>
+    <latestTable></latestTable>
   </div>
 </template>
 <script>
-import NewTable from "@/components/User/newTable.vue";
+import latestTable from "@/components/User/latestTable.vue";
 
 export default {
   components: {
-    NewTable
+    latestTable
   }
 };
 </script>
@@ -73,3 +73,4 @@ export default {
   margin-right: 50px;
 }
 </style>
+

@@ -34,6 +34,7 @@
       />
       <Button type="primary">登陆</Button>
     </div>
+   
   </div>
 </template>
 <script>
@@ -108,5 +109,9 @@ export default {
   float: right;
   margin-top: 15px;
   margin-right: 50px;
+}
+.lxbtn {
+  margin-top: -700px;
+  display: inline-block;
 }
 </style>
