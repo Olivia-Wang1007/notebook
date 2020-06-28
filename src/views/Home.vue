@@ -8,10 +8,13 @@
       </div>
 
       <router-link to="/HomePage/HomePage"
-        ><Button type="primary">登陆</Button></router-link
+        ><Button type="primary" class="bbtn">V1.0</Button></router-link
       >
-        <router-link to="/newPage"
-        ><Button type="primary">测试</Button></router-link
+      <router-link to="/newPage"
+        ><Button type="error" class="bbtn">Vuex</Button></router-link
+      >
+      <router-link to="/Page2"
+        ><Button type="warning" class="bbtn">compute</Button></router-link
       >
     </div>
   </div>
@@ -20,7 +23,6 @@
 <script>
 export default {
   name: "Home",
-
 };
 </script>
 <style scoped>
@@ -72,5 +74,8 @@ export default {
 }
 #btn {
   margin-right: 50px;
+}
+.bbtn {
+  margin: 10px 10px 10px 10px;
 }
 </style>

@@ -1,11 +1,14 @@
 <template>
   <div>
-    <!-- 新建的弹窗-->
+    <!-- 按钮 -->
     <Button type="primary" @click="createBtn" class="btns">新建</Button>
+    <Button @click="modifyBtn" type="primary" class="btns">修改</Button>
+    <Button @click="deleteConfirm" type="primary" class="btns">删除</Button>
+    <!-- 弹窗-->
     <Modal
-      v-model="createModal"
-      title="新建"
-      @on-ok="createOk"
+      v-model="modal"
+      :title="nowTitle"
+      @on-ok="modalOk"
       @on-cancel="cancel"
     >
       <!-- 新建输入框 -->
@@ -13,31 +16,25 @@
         v-model="content"
         type="textarea"
         :rows="4"
+        v-if="this.operation === 'create'"
         placeholder="输入你想记录的事..."
       />
+      <!--修改的输入框 -->
+      <Input
+        :value="selectedContent"
+        :rows="4"
+        type="textarea"
+        v-else-if="this.operation === 'modify'"
+      />
+      <!-- 查看的输入框 -->
+      <Input :value="selectedContent" :rows="4" type="textarea" v-else />
     </Modal>
-
-    <!-- 修改的弹窗 -->
-    <Button @click="modifyBtn" type="primary" class="btns">修改</Button>
-    <Modal
-      title="修改"
-      v-model="modifyModal"
-      :mask-closable="false"
-      @on-ok="modifyOk"
-    >
-      <!-- 修改输入框 -->
-      <Input v-model="nowContent" :rows="4" type="textarea" />
-    </Modal>
-
-    <!-- 删除按钮 -->
-    <Button @click="deleteConfirm" type="primary" class="btns">删除</Button>
-
     <!-- 表格区域 -->
     <Table
       border
       stripe
       ref="selection"
-      :columns="columns4"
+      :columns="columns"
       :data="allList"
       onselect
       @on-select="getRow"
@@ -46,26 +43,17 @@
       @on-select-all="selectAll"
       class="tab"
     ></Table>
-
-    <!-- 查看的弹窗 -->
-
-    <Modal v-model="checkModal" title="查看" @on-ok="ok" @on-cancel="cancel">
-      <Input v-model="nowContent" :rows="4" type="textarea" />
-    </Modal>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      operation: "",
       selectedItems: "",
-      checkModal: false,
-      nowContent: "",
-      createModal: false,
+      modal: false,
       content: "",
-      modifyModal: false,
-      clk: false,
-      columns4: [
+      columns: [
         {
           type: "selection",
           width: 60,
@@ -84,38 +72,36 @@ export default {
     };
   },
   methods: {
-    // createOk() {
-    //   console.log(this.clk);
-    //   this.clk = !this.clk;
-    //   console.log(this.clk);
-    // },
-    createOk() {
-      // 把新项添加到allList里
-      const list = {
-        id: Date.now().toString(36),
-        content: this.content,
-        time: new Date().toLocaleString(),
-      };
-      this.allList = [...this.allList, list];
-      this.content = "";
-      this.saveContent();
+    modalOk() {
+      if (this.operation === "create") {
+        const list = {
+          id: Date.now().toString(36),
+          content: this.content,
+          time: new Date().toLocaleString(),
+        };
+        this.allList = [...this.allList, list];
+        this.content = "";
+        this.saveContent();
+      } else if (this.operation === "modify") {
+        this.old = this.allList.find(this.findContent);
+        this.old.time = new Date().toLocaleString();
+        this.nowId = null;
+        this.saveContent();
+      }
     },
     createBtn() {
-
-      this.createModal = true;
+      this.operation = "create";
+      this.modal = true;
     },
     ok() {
       this.$Message.info("Clicked ok");
     },
-
     cancel() {
       this.$Message.info("Clicked cancel");
     },
     getRow(selection, row) {
       this.nowId = row.id;
-      this.nowContent = row.content;
       this.content = "";
-
       this.saveContent();
       this.selectedItems = selection;
     },
@@ -128,25 +114,8 @@ export default {
     findContent(con) {
       return con.id === this.nowId;
     },
-
-    modifyOk() {
-      this.old = this.allList.find(this.findContent);
-      console.log(this.old);
-      this.old.content = this.nowContent;
-      this.old.time = new Date().toLocaleString();
-
-      this.nowContent = null;
-      this.nowId = null;
-      //this.content = "";
-      this.nowContent = "";
-
-      this.saveContent();
-    },
-
     deleteConfirm() {
-
       if (this.selectedItems.length == 0) {
-
         alert("请勾选想要删除的事件！");
       } else {
         this.$Modal.confirm({
@@ -170,22 +139,21 @@ export default {
       const parsed = JSON.stringify(this.allList);
       localStorage.setItem("allList", parsed);
     },
-
-    checkContent(content1) {
-      this.checkModal = true;
-      this.nowContent = content1.content;
+    checkContent() {
+      this.modal = true;
+      this.operation = "check";
     },
     modifyBtn() {
-      console.log(this.selectedItems);
+      this.operation = "modify";
       this.nowIndex = this.allList.findIndex(this.findContent);
       if (this.selectedItems.length == 0) {
-        this.modifyModal = false;
+        this.modal = false;
         alert("请勾选想要修改的记录！");
       } else if (this.selectedItems.length > 1) {
-        this.modifyModal = false;
+        this.modal = false;
         alert("一次只能修改一条记录！");
       } else {
-        this.modifyModal = true;
+        this.modal = true;
       }
     },
   },
@@ -198,34 +166,18 @@ export default {
       }
     }
   },
-  // watch: {
-  //   allList: function() {
-  //     const list = {
-  //       id: Date.now().toString(36),
-  //       content: this.content,
-  //       time: new Date().toLocaleString(),
-  //     };
-  //     console.log("测试");
-  //     console.log(this.allList);
-  //     return [...this.allList, list];
-  //   },
-  // },
-  // computed:{
-  //   allList: function() {
-  //    if(this.clk=true){
-  //         const list = {
-  //         id: Date.now().toString(36),
-  //         content: this.content,
-  //         time: new Date().toLocaleString(),
-  //       };
-  //       console.log("测试");
-  //       console.log(this.allList);
-  //       this.allList= [...this.allList, list];
-  //    }
-
-  //     }
-
-  //}
+  computed: {
+    nowTitle: function() {
+      return this.operation === "create"
+        ? "新建"
+        : this.operation === "modify"
+        ? "修改"
+        : "查看";
+    },
+    selectedContent: function() {
+      return this.selectedItems && this.selectedItems[0].content;
+    },
+  },
 };
 </script>
 <style scoped>
