@@ -8,14 +8,10 @@
       </div>
 
       <router-link to="/HomePage/HomePage"
-        ><Button type="primary" class="bbtn">V1.0</Button></router-link
+        ><Button type="primary" class="bbtn">登陆</Button></router-link
       >
-      <router-link to="/newPage"
-        ><Button type="error" class="bbtn">Vuex</Button></router-link
-      >
-      <router-link to="/Page2"
-        ><Button type="warning" class="bbtn">compute</Button></router-link
-      >
+ 
+ 
     </div>
   </div>
 </template>

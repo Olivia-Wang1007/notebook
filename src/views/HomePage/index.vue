@@ -20,15 +20,17 @@
     </div>
     <!-- 表格 -->
     <NewTable></NewTable>
+    <!-- <Table2 /> -->
   </div>
 </template>
 <script>
 import NewTable from "@/components/User/newTable.vue";
-
+//import Table2 from "@/components/compute/Table2.vue";
 export default {
   components: {
-    NewTable
-  }
+    NewTable,
+    //Table2
+  },
 };
 </script>
 <style scoped>

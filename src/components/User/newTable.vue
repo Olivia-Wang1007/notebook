@@ -1,11 +1,14 @@
 <template>
   <div>
-    <!-- 新建的弹窗-->
-    <Button type="primary" @click="createBtn" class="btns">新建</Button>
+    <!-- 按钮 -->
+    <Button type="primary" @click="onCreateBtn" class="btns">新建</Button>
+    <Button @click="onModifyBtn" type="primary" class="btns">修改</Button>
+    <Button @click="onDeleteConfirm" type="primary" class="btns">删除</Button>
+    <!-- 弹窗-->
     <Modal
-      v-model="createModal"
-      title="新建"
-      @on-ok="createOk"
+      v-model="modal"
+      :title="nowTitle"
+      @on-ok="onModalOk"
       @on-cancel="cancel"
     >
       <!-- 新建输入框 -->
@@ -13,59 +16,47 @@
         v-model="content"
         type="textarea"
         :rows="4"
+        v-if="this.operation === 'create'"
         placeholder="输入你想记录的事..."
       />
+      <!--修改的输入框 -->
+      <Input
+        ref="modifyRef"
+        :value="selectedContent"
+        :rows="4"
+        type="textarea"
+        @on-change="onModifyChange"
+        v-else-if="this.operation === 'modify'"
+      />
+      <!-- 查看的输入框 -->
+      <Input :value="cContent" :rows="4" type="textarea" v-else />
     </Modal>
-
-    <!-- 修改的弹窗 -->
-    <Button @click="modifyBtn" type="primary" class="btns">修改</Button>
-    <Modal
-      title="修改"
-      v-model="modifyModal"
-      :mask-closable="false"
-      @on-ok="modifyOk"
-    >
-      <!-- 修改输入框 -->
-      <Input v-model="nowContent" :rows="4" type="textarea" />
-    </Modal>
-
-    <!-- 删除按钮 -->
-    <Button @click="deleteConfirm" type="primary" class="btns">删除</Button>
-
     <!-- 表格区域 -->
     <Table
       border
       stripe
       ref="selection"
-      :columns="columns4"
+      :columns="columns"
       :data="allList"
       onselect
       @on-select="getRow"
-      @on-select-cancel="cancelSelect"
-      @on-row-click="checkContent"
-      @on-select-all="selectAll"
+      @on-select-cancel="onCancelSelect"
+      @on-row-click="onCheckContent"
+      @on-select-all="onSelectAll"
       class="tab"
     ></Table>
-
-    <!-- 查看的弹窗 -->
-
-    <Modal v-model="checkModal" title="查看" @on-ok="ok" @on-cancel="cancel">
-      <Input v-model="nowContent" :rows="4" type="textarea" />
-    </Modal>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      selectedItems: "",
-      checkModal: false,
-      nowContent: "",
-      createModal: false,
+      operation: "",
+      selectedItems: null,
+      modal: false,
       content: "",
-      modifyModal: false,
-      clk: false,
-      columns4: [
+      cContent: "",
+      columns: [
         {
           type: "selection",
           width: 60,
@@ -83,70 +74,74 @@ export default {
       allList: [],
     };
   },
+  computed: {
+    nowTitle: function() {
+      return this.operation === "create"
+        ? "新建"
+        : this.operation === "modify"
+        ? "修改"
+        : "查看";
+    },
+    selectedContent: function() {
+      return this.selectedItems && this.selectedItems[0].content;
+    },
+  },
+  mounted() {
+    if (localStorage.getItem("allList")) {
+      try {
+        this.allList = JSON.parse(localStorage.getItem("allList"));
+      } catch (e) {
+        localStorage.removeItem("allList");
+      }
+    }
+  },
   methods: {
-    // createOk() {
-    //   console.log(this.clk);
-    //   this.clk = !this.clk;
-    //   console.log(this.clk);
-    // },
-    createOk() {
-      // 把新项添加到allList里
-      const list = {
-        id: Date.now().toString(36),
-        content: this.content,
-        time: new Date().toLocaleString(),
-      };
-      this.allList = [...this.allList, list];
-      this.content = "";
-      this.saveContent();
+    onModifyChange() {
+      // const newValue = event.target.value;
     },
-    createBtn() {
+    onModalOk() {
+      if (this.operation === "create") {
+        const list = {
+          id: Date.now().toString(36),
+          content: this.content,
+          time: new Date().toLocaleString(),
+        };
+        this.allList = [...this.allList, list];
+        this.content = "";
+        this.saveContent();
+      } else if (this.operation === "modify") {
+        const newValue = this.$refs["modifyRef"].$refs.textarea.value;
+        this.old = this.allList.find(this.findContent);
+        this.old.content = newValue;
+        this.old.time = new Date().toLocaleString();
+        this.nowId = null;
 
-      this.createModal = true;
+        this.saveContent();
+      }
     },
-    ok() {
-      this.$Message.info("Clicked ok");
+    onCreateBtn() {
+      this.operation = "create";
+      this.modal = true;
     },
-
-    cancel() {
-      this.$Message.info("Clicked cancel");
-    },
+    ok() {},
+    cancel() {},
     getRow(selection, row) {
       this.nowId = row.id;
-      this.nowContent = row.content;
       this.content = "";
-
       this.saveContent();
       this.selectedItems = selection;
     },
-    cancelSelect(selection) {
+    onCancelSelect(selection) {
       this.selectedItems = selection;
     },
-    selectAll(selection) {
+    onSelectAll(selection) {
       this.selectedItems = selection;
     },
     findContent(con) {
       return con.id === this.nowId;
     },
-
-    modifyOk() {
-      this.old = this.allList.find(this.findContent);
-      console.log(this.old);
-      this.old.content = this.nowContent;
-      this.old.time = new Date().toLocaleString();
-
-      this.nowContent = null;
-      this.nowId = null;
-      //this.content = "";
-      this.nowContent = "";
-
-      this.saveContent();
-    },
-
-    deleteConfirm() {
-
+    onDeleteConfirm() {
       if (this.selectedItems.length == 0) {
-
         alert("请勾选想要删除的事件！");
       } else {
         this.$Modal.confirm({
@@ -170,62 +165,25 @@ export default {
       const parsed = JSON.stringify(this.allList);
       localStorage.setItem("allList", parsed);
     },
-
-    checkContent(content1) {
-      this.checkModal = true;
-      this.nowContent = content1.content;
+    onCheckContent(content1) {
+      this.modal = true;
+      this.cContent = content1.content;
+      this.operation = "check";
     },
-    modifyBtn() {
-      console.log(this.selectedItems);
+    onModifyBtn() {
+      this.operation = "modify";
       this.nowIndex = this.allList.findIndex(this.findContent);
       if (this.selectedItems.length == 0) {
-        this.modifyModal = false;
+        this.modal = false;
         alert("请勾选想要修改的记录！");
       } else if (this.selectedItems.length > 1) {
-        this.modifyModal = false;
+        this.modal = false;
         alert("一次只能修改一条记录！");
       } else {
-        this.modifyModal = true;
+        this.modal = true;
       }
     },
   },
-  mounted() {
-    if (localStorage.getItem("allList")) {
-      try {
-        this.allList = JSON.parse(localStorage.getItem("allList"));
-      } catch (e) {
-        localStorage.removeItem("allList");
-      }
-    }
-  },
-  // watch: {
-  //   allList: function() {
-  //     const list = {
-  //       id: Date.now().toString(36),
-  //       content: this.content,
-  //       time: new Date().toLocaleString(),
-  //     };
-  //     console.log("测试");
-  //     console.log(this.allList);
-  //     return [...this.allList, list];
-  //   },
-  // },
-  // computed:{
-  //   allList: function() {
-  //    if(this.clk=true){
-  //         const list = {
-  //         id: Date.now().toString(36),
-  //         content: this.content,
-  //         time: new Date().toLocaleString(),
-  //       };
-  //       console.log("测试");
-  //       console.log(this.allList);
-  //       this.allList= [...this.allList, list];
-  //    }
-
-  //     }
-
-  //}
 };
 </script>
 <style scoped>
